@@ -1,4 +1,4 @@
-# App 5°
+# App 5° - Organizador de viajes usando AI
 
 ## Alumnos
 
