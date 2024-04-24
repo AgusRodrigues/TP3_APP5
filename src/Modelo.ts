@@ -38,10 +38,13 @@ export function agregarItinerario (viaje:Viaje, dias: Dia[]): Itinerario  {
     // agrega Itinerario a la base de datos
 }
 
-export function borrartinerario (id: number) : void  { 
+export function borrarItinerario (id: number) : void  { 
     // borra Itinerario a la base de datos consultandolo por su ID
 }
 
+export function consultarItinerario (id: number) : Intinerario  { 
+    // borra Itinerario a la base de datos consultandolo por su ID
+}
 export function consultarLista () : Lista {
     /// arma un listado que contiene todos los itinerarios
 }
