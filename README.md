@@ -20,6 +20,79 @@ Adjuntamos los siguientes links que pueden ser de ayuda para trabajar con esta A
 
 [Video explicativo de como usuarla](https://youtu.be/_CqKs0cQCfo)
 
+## Ejemplo de prompt para la API
+
+Haciendo numerosas pruebas y basándonos en el modelo que planteamos, generamos la siguiente prompt para que la IA devuelva un JSON estructurado de la manera que deseamos.
+
+Prompt:
+````
+Crea un itinerario de viaje para ir a visitar ${destino} siendo un viajero de tipo ${tipoDeViajero} entre los dias ${fechaInicio} a las ${horaInicio} y ${fechaFin} a las ${horaFin}. 
+
+IMPORTANTE: El Output debe ser EXCLUSIVAMENTE codigo en formato JSON (sin datos extras, ni notas) con la siguiente estructura:
+
+{
+ "dias": [
+  {
+   "fecha": "15/07/2024",
+   "actividades": [
+    {
+     "Inicio": "09:00",
+     "Fin": "10:00",
+     "Nombre": "Desayuno en el hotel",
+     "descripcion": "Disfrutar de un rico desayuno tipico argentino con medialunas"
+    },
+    {
+     "Inicio": "10:00",
+     "Fin": "12:00",
+     "Nombre": "Plaza de Mayo",
+     "descripcion": "Visita a la Plaza de Mayo, el corazón político de la ciudad, donde se encuentran la Casa Rosada, el Cabildo y la Catedral Metropolitana."
+    },
+    {
+     "Inicio": "12:00",
+     "Fin": "13:00",
+     "Nombre": "9 de Julio",
+     "descripcion": "Caminata por la Avenida 9 de Julio, la avenida más ancha del mundo."
+    },
+    {
+     "Inicio": "13:00",
+     "Fin": "14:30",
+     "Nombre": "Parrilla Benito",
+     "descripcion": "Almuerzo en un restaurante en el barrio de Microcentro."
+    },
+    {
+     "Inicio": "14:30",
+     "Fin": "16:00",
+     "Nombre": "Teatro Colón",
+     "descripcion": "Visita al Teatro Colón, uno de los teatros de ópera más importantes del mundo."
+    },
+    {
+     "Inicio": "16:00",
+     "Fin": "19:00",
+     "Nombre": "Paseo en Barco",
+     "descripcion": "Paseo en barco por el Río de la Plata, disfrutando de las vistas de la ciudad y sus alrededores."
+    },
+    {
+     "Inicio": "19:00",
+     "Fin": "21:00",
+     "Nombre": "Cena Palermitana",
+     "descripcion": "Cena en un restaurante en el barrio de Palermo Soho, conocido por su vida nocturna y sus restaurantes de moda."
+    },
+    {
+     "Inicio": "21:00",
+     "Fin": "23:00",
+     "Nombre": "Paseo Nocturno por Palermo",
+     "descripcion": "Disfrutar de la vida nocturna en Palermo Soho, visitando bares y discotecas."
+    }
+   ]
+  }
+ ]
+}
+````
+Para llegar a este resultado, seguimos las prácticas de armado de prompt de este artículo:
+
+[**How To Get Consistent JSON From Google Gemini (With Practical Example)**](https://hasanaboulhasan.medium.com/how-to-get-consistent-json-from-google-gemini-with-practical-example-48612ed1ab40 )
+
+Encontramos gran efectividad en las pruebas con este prompt, aun así a veces no devuelve la data en formato JSON o agrega texto extra. Por esto, creemos que el resultado de la API debe ser verificado y de no cumplir los requisitos (contener un JSON) llamar a la API nuevamente. Además esta función debe poder extraer el JSON de una cadena de caracteres (string) en el caso de que sea devuelto con texto por fuera de lo requerido.
 
 ## Decisiones de modelado
 
@@ -45,9 +118,12 @@ Arrancamos el proceso de DDD eligiendo las entidades del proyecto:
 
 Nos pareció que el itinerario necesitaba agregar, borrar y consultar. Modificaciones no hace falta porque en el problema no está especificado, a pesar de esto, borrar itinerario si lo consideramos necesario en caso de que el usuario no la haya pasado bien en sus vacaciones y quiera olvidarlas. Por otro lado, creemos que consultar si es importante ya que la aplicación además de traerlos en un listado, podría tener una página específica que requiera traer un único itinerario.
 
+> Al agregar itinerario se debe llamar a la función GeneradorDias(Viaje) la cual se encarga de hacer la consulta a la API para que genere el listado de Dias con sus respectivas actividades. Esta función (GeneradorDias) también debe encargarse de corroborar que el output de la API contenga un JSON, y de no ser así reenviar el prompt.
+
 El único método que consideramos para la Lista es la consulta, ya que en la base de datos no va a ser necesario generar un listado ya que no hay diferentes usuarios, y esta lista se puede generar en el backend.
 
 Para las demás entidades no consideramos necesario asignarles métodos específicos ya que están englobadas en los itinerarios.
+
 
 
 ## Algunas ideas para los siguientes
