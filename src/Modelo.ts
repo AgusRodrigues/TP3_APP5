@@ -20,7 +20,10 @@ export interface Actividad {
     descripcion: string
 }
 
-export type Dia = Actividad []; 
+export interface Dia {
+    fecha: Date,
+    actividades: Actividad []; 
+}
 
 export interface Itinerario {
     id: number,
@@ -34,8 +37,8 @@ export interface Lista{
 
 //Métodos 
 
-export function agregarItinerario (viaje:Viaje, dias: Dia[]): Itinerario  { 
-    // agrega Itinerario a la base de datos
+export function agregarItinerario (viaje:Viaje): Itinerario  { 
+    // llama a la funcion generadorDias y agregar el itinerario a la API
 }
 
 export function borrarItinerario (id: number) : void  { 
@@ -48,3 +51,6 @@ export function consultarItinerario (id: number) : Intinerario  {
 export function consultarLista () : Lista {
     /// arma un listado que contiene todos los itinerarios
 }
+
+export function generadorDias (viaje: Viaje) : Dia[] {
+    // arma un listado de dias llamando a la consulta de la API. Debería corroborar que la consulta devuelva unicamente un JSON, en caso de que no, debería volverle a pedir la información 
