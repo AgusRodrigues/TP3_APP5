@@ -92,7 +92,7 @@ Para llegar a este resultado, seguimos las prácticas de armado de prompt de est
 
 [**How To Get Consistent JSON From Google Gemini (With Practical Example)**](https://hasanaboulhasan.medium.com/how-to-get-consistent-json-from-google-gemini-with-practical-example-48612ed1ab40 )
 
-Encontramos gran efectividad en las pruebas con este prompt, aun así a veces no devuelve la data en formato JSON o agrega texto extra. Por esto, creemos que el resultado de la API debe ser verificado y de no cumplir los requisitos (contener un JSON) llamar a la API nuevamente. Además esta función debe poder extraer el JSON de una cadena de caracteres (string) en el caso de que sea devuelto con texto por fuera de lo requerido.
+Encontramos gran efectividad en las pruebas con este prompt, aun así a veces no devuelve la data en formato JSON o agrega texto extra. Por esto, creemos que el resultado de la API debe ser verificado y de no cumplir los requisitos (contener un JSON) llamar a la API nuevamente. Además esta función debe poder extraer el JSON de una cadena de caracteres (string) en el caso de que sea devuelto con texto por fuera de lo requerido. IMPORTANTE: En las pruebas que realizamos, cuando la api devuelve un JSON siempre esta dentro de un bloque de codigo.
 
 ## Decisiones de modelado
 
