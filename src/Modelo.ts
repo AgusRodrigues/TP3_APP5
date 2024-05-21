@@ -10,7 +10,7 @@
 import { GeminiAPI } from "gemini-api";
 import * as sqlite3 from "sqlite3";
 
-// Initialize the Gemini API
+// inicializamos la api de gemini
 
 const apiKey = "your_api_key";
 const apiSecret = "your_api_secret";
@@ -21,10 +21,9 @@ const geminiApi = new GeminiAPI({
   sandbox: sandbox,
 });
 
-// Initialize SQLite
+// inicializamos sqlite
 const db = new sqlite3.Database("creardb.sql");
 
-// Itinerary interfaces
 export interface Viaje {
   destino: string;
   viajero: number;
@@ -55,7 +54,6 @@ async function agregarItinerario(
   id: string
 ): Promise<Itinerario | null> {
   const generarListaDias = async (viaje: Viaje): Promise<Dia[]> => {
-    // Implement this function to generate the list of days for the itinerary
     return [];
   };
 
@@ -103,7 +101,7 @@ const borrarItinerario = (id: string): Promise<{ message: string }> => {
       if (err) {
         reject(err);
       } else {
-        resolve({ message: "Itinerary deleted successfully" });
+        resolve({ message: "Itinerario borrado sin problemas" });
       }
     });
   });

@@ -31,14 +31,14 @@ app.post("/v1/itinerario/agregar", (req: Request, res: Response) => {
   agregarItinerario(viaje, id)
     .then((itinerario) => {
       if (itinerario) {
-        res.status(201).send({ message: "Itinerary added successfully" });
+        res.status(201).send({ message: "Itineario agreado perfectamente" });
       } else {
-        res.status(500).send({ message: "Error adding itinerary" });
+        res.status(500).send({ message: "Hubo un error agregando el itineario" });
       }
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send({ message: "Error adding itinerary" });
+      res.status(500).send({ message: "Hubo un error agregando el itineario" });
     });
 });
 
@@ -50,7 +50,7 @@ app.post("/v1/itinerario/borrar", (req: Request, res: Response) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send({ message: "Error deleting itinerary" });
+      res.status(500).send({ message: "Hubo un error borrando el itineario" });
     });
 });
 
@@ -61,12 +61,12 @@ app.get("/v1/itinerario/:id", (req: Request, res: Response) => {
       if (itinerario) {
         res.send(itinerario);
       } else {
-        res.status(404).send({ message: "Itinerary not found" });
+        res.status(404).send({ message: "Itineario no encontrado" });
       }
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send({ message: "Error retrieving itinerary" });
+      res.status(500).send({ message: "Hubo un error al consultar el itineario" });
     });
 });
 app.listen(port, () => {
