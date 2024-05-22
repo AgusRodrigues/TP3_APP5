@@ -12,8 +12,8 @@ import * as sqlite3 from "sqlite3";
 
 // inicializamos la api de gemini
 
-const apiKey = "your_api_key";
-const apiSecret = "your_api_secret";
+const apiKey = "AIzaSyDoVhBFXEo3Kohnlp3jfTsr65Gr8RHi8vI";
+const apiSecret = "AIzaSyDoVhBFXEo3Kohnlp3jfTsr65Gr8RHi8vI";
 const sandbox = true;
 const geminiApi = new GeminiAPI({
   key: apiKey,
@@ -49,14 +49,7 @@ export interface Itinerario {
   duracionViaje: number;
 }
 
-async function agregarItinerario(
-  viaje: Viaje,
-  id: string
-): Promise<Itinerario | null> {
-  const generarListaDias = async (viaje: Viaje): Promise<Dia[]> => {
-    return [];
-  };
-
+async function agregarItinerario(viaje: Viaje, id: string): Promise<Itinerario | null> {
   const listaDias = await generarListaDias(viaje);
 
   const nuevoItinerario: Itinerario = {
@@ -80,12 +73,35 @@ async function agregarItinerario(
   });
 }
 
+async function generarActividadesParaDia(viaje: Viaje, fecha: Date): Promise<Actividad[]> {
+  // usamos la api para generar un request de actividades
+  const response = await geminiApi.request({
+    method: "GET",
+    path: "/actividades",
+    query: {
+      lugar: viaje.destino,
+      fecha: fecha.toISOString(),
+    },
+  });
+
+  const actividades: Actividad[] = response.data.activities.map((activity: any) => ({
+    inicio: new Date(activity.start_time),
+    fin: new Date(activity.end_time),
+    nombre: activity.name,
+    descripcion: activity.description,
+  }));
+
+  return actividades;
+}
+
 async function generarListaDias(viaje: Viaje): Promise<Dia[]> {
   const listaDias: Dia[] = [];
   for (let i = 0; i < duracionViaje(viaje); i++) {
+    const fecha = new Date(viaje.inicio.getTime() + i * 86400000);
+    const actividades = await generarActividadesParaDia(viaje, fecha); // Aca llamamos a la api
     listaDias.push({
-      fecha: new Date(viaje.inicio.getTime() + i * 86400000),
-      actividades: [],
+      fecha,
+      actividades,
     });
   }
   return listaDias;
