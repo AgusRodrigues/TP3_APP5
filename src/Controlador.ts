@@ -1,4 +1,5 @@
-import express, { Express, Request, Response } from "express";
+import express from "express";
+import { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { request } from "http";
 import {

@@ -14,11 +14,9 @@ import * as sqlite3 from "sqlite3";
 
 const apiKey = "AIzaSyDoVhBFXEo3Kohnlp3jfTsr65Gr8RHi8vI";
 const apiSecret = "AIzaSyDoVhBFXEo3Kohnlp3jfTsr65Gr8RHi8vI";
-const sandbox = true;
 const geminiApi = new GeminiAPI({
   key: apiKey,
   secret: apiSecret,
-  sandbox: sandbox,
 });
 
 // inicializamos sqlite
