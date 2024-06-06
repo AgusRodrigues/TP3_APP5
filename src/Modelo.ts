@@ -64,78 +64,7 @@ async function init() {
 }
 init();
 
-export async function agregarItinerario(viaje: Viaje): Promise<Itinerario> {
-  // Genera el itinerario de viaje utilizando la función generadorDias
-  const itinerario = await generadorDias(viaje);
-
-  // Inserta el itinerario en la tabla Itinerario de la base de datos
-  const itinerarioResult = await db.run(`INSERT INTO Itinerario (viaje_id) VALUES (?)`, viaje.destino);
-
-  // Obtiene el ID del itinerario insertado a partir del resultado de la operación de inserción
-  const itinerarioId = itinerarioResult.lastID;
-
-  if (typeof itinerarioId !== 'number') {
-    // Manejar el caso en el que el ID no es un número (por ejemplo, si es undefined)
-    throw new Error('Error al obtener el ID del itinerario');
-  }
-
-  // Itera sobre cada actividad del itinerario
-  for (const actividad of itinerario.actividades) {
-    // Inserta cada actividad del itinerario en la tabla Actividad de la base de datos
-    await db.run(
-      `INSERT INTO Actividad (itinerario_id, inicio, fin, nombre, descripcion) VALUES (?, ?, ?, ?, ?)`,
-      itinerarioId, actividad.inicio, actividad.fin, actividad.nombre, actividad.descripcion
-    );
-  }
-  
-  // Devuelve el itinerario completo, con el ID del itinerario insertado, el viaje recibido como parámetro y las actividades del itinerario
-  return {
-    id: itinerarioId,
-    viaje: viaje,
-    actividades: itinerario.actividades
-  };
-}
-
-export async function borrarItinerario(id: number): Promise<void> {
-  await db.run(`DELETE FROM Itinerario WHERE id = ?`, id);
-  await db.run(`DELETE FROM Viaje WHERE id = ?`, id);
-}
-
-export async function consultarItinerario(id: number): Promise<Itinerario> {
-  const itinerario = await db.get(`SELECT * FROM Itinerario WHERE id = ?`, id);
-  const actividades = await db.all(`SELECT * FROM Actividad WHERE itinerario_id = ?`, id);
-  const viaje = await db.get(`SELECT * FROM Viaje WHERE id = ?`, itinerario.viaje_id);
-  
-  return {
-      id: itinerario.id,
-      viaje: viaje,
-      actividades: actividades
-  };
-}
-
-export async function consultarLista(): Promise<Lista> {
-  const itinerarios = await db.all(`SELECT * FROM Itinerario`);
-  const lista: Lista = { itinerarios: [] };
-  
-  for (const itinerario of itinerarios) {
-      // Obtener información del viaje asociado al itinerario
-      const viaje = await db.get(`SELECT * FROM Viaje WHERE id = ?`, itinerario.viaje_id);
-      
-      // Obtener actividades del itinerario
-      const actividades = await db.all(`SELECT * FROM Actividad WHERE itinerario_id = ?`, itinerario.id);
-      
-      // Construir el objeto Itinerario con el viaje y las actividades
-      lista.itinerarios.push({
-          id: itinerario.id,
-          viaje: viaje,
-          actividades: actividades
-      });
-  }
-  
-  return lista;
-}
-
-export async function generadorDias(viaje: Viaje): Promise<{ actividades: Actividad[] }> {
+export async function generadorItinerario(viaje: Viaje): Promise<{ actividades: Actividad[] }> {
   const prompt = `Crea un itinerario de viaje para ir a visitar ${viaje.destino} siendo un viajero de tipo ${viaje.viajero  === 'ciudad' ? 'urbano' : viaje.viajero === 'vida nocturna' ? 'nocturno' : viaje.viajero === 'museos' ? 'cultural' : 'naturalista'} entre los dias ${viaje.inicio.toLocaleDateString()} a las ${viaje.inicio.toLocaleTimeString()} y ${viaje.fin.toLocaleDateString()} a las ${viaje.fin.toLocaleTimeString()}. 
 
   IMPORTANTE: El Output debe ser EXCLUSIVAMENTE codigo en formato JSON (sin datos extras, ni notas) con la siguiente estructura:
@@ -219,3 +148,76 @@ export async function generadorDias(viaje: Viaje): Promise<{ actividades: Activi
     throw new Error("Error al parsear la respuesta de la API");
   }
 }
+
+
+export async function agregarItinerario(viaje: Viaje): Promise<Itinerario> {
+  // Genera el itinerario de viaje utilizando la función generadorItinerario
+  const itinerario = await generadorItinerario(viaje);
+
+  // Inserta el itinerario en la tabla Itinerario de la base de datos
+  const itinerarioResult = await db.run(`INSERT INTO Itinerario (viaje_id) VALUES (?)`, viaje.destino);
+
+  // Obtiene el ID del itinerario insertado a partir del resultado de la operación de inserción
+  const itinerarioId = itinerarioResult.lastID;
+
+  if (typeof itinerarioId !== 'number') {
+    // Manejar el caso en el que el ID no es un número (por ejemplo, si es undefined)
+    throw new Error('Error al obtener el ID del itinerario');
+  }
+
+  // Itera sobre cada actividad del itinerario
+  for (const actividad of itinerario.actividades) {
+    // Inserta cada actividad del itinerario en la tabla Actividad de la base de datos
+    await db.run(
+      `INSERT INTO Actividad (itinerario_id, inicio, fin, nombre, descripcion) VALUES (?, ?, ?, ?, ?)`,
+      itinerarioId, actividad.inicio, actividad.fin, actividad.nombre, actividad.descripcion
+    );
+  }
+  
+  // Devuelve el itinerario completo, con el ID del itinerario insertado, el viaje recibido como parámetro y las actividades del itinerario
+  return {
+    id: itinerarioId,
+    viaje: viaje,
+    actividades: itinerario.actividades
+  };
+}
+
+export async function borrarItinerario(id: number): Promise<void> {
+  await db.run(`DELETE FROM Itinerario WHERE id = ?`, id);
+  await db.run(`DELETE FROM Viaje WHERE id = ?`, id);
+}
+
+export async function consultarItinerario(id: number): Promise<Itinerario> {
+  const itinerario = await db.get(`SELECT * FROM Itinerario WHERE id = ?`, id);
+  const actividades = await db.all(`SELECT * FROM Actividad WHERE itinerario_id = ?`, id);
+  const viaje = await db.get(`SELECT * FROM Viaje WHERE id = ?`, itinerario.viaje_id);
+  
+  return {
+      id: itinerario.id,
+      viaje: viaje,
+      actividades: actividades
+  };
+}
+
+export async function consultarLista(): Promise<Lista> {
+  const itinerarios = await db.all(`SELECT * FROM Itinerario`);
+  const lista: Lista = { itinerarios: [] };
+  
+  for (const itinerario of itinerarios) {
+      // Obtener información del viaje asociado al itinerario
+      const viaje = await db.get(`SELECT * FROM Viaje WHERE id = ?`, itinerario.viaje_id);
+      
+      // Obtener actividades del itinerario
+      const actividades = await db.all(`SELECT * FROM Actividad WHERE itinerario_id = ?`, itinerario.id);
+      
+      // Construir el objeto Itinerario con el viaje y las actividades
+      lista.itinerarios.push({
+          id: itinerario.id,
+          viaje: viaje,
+          actividades: actividades
+      });
+  }
+  
+  return lista;
+}
+
