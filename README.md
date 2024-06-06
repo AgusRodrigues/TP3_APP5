@@ -26,7 +26,7 @@ Haciendo numerosas pruebas y basándonos en el modelo que planteamos, generamos 
 
 Prompt:
 ````
-Crea un itinerario de viaje para ir a visitar ${destino} siendo un viajero de tipo ${tipoDeViajero} entre los dias ${fechaInicio} a las ${horaInicio} y ${fechaFin} a las ${horaFin}. 
+Crea un itinerario de viaje para ir a visitar ${viaje.destino} siendo un viajero de tipo ${viaje.viajero  === 'ciudad' ? 'urbano' : viaje.viajero === 'vida nocturna' ? 'nocturno' : viaje.viajero === 'museos' ? 'cultural' : 'naturalista'} entre los dias ${viaje.inicio.toLocaleDateString()} a las ${viaje.inicio.toLocaleTimeString()} y ${viaje.fin.toLocaleDateString()} a las ${viaje.fin.toLocaleTimeString()}.
 
 IMPORTANTE: El Output debe ser EXCLUSIVAMENTE codigo en formato JSON (sin datos extras, ni notas) con la siguiente estructura:
 
