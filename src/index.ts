@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
-import { agregarItinerario, borrarItinerario, consultarItinerario, Viaje } from "./Modelo";
+import { agregarItinerario, borrarItinerario, consultarItinerario, consultarLista, Viaje } from "./Modelo";
 
 dotenv.config();
 
