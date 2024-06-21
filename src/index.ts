@@ -104,6 +104,18 @@ app.get("/v1/itinerario/:id", (req: Request, res: Response, next: NextFunction) 
         });
 });
 
+app.get("/v1/itinerarios", (req: Request, res: Response, next: NextFunction) => {
+    consultarLista()
+        .then((lista) => {
+            res.send(lista);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send({ message: "Hubo un error al consultar la lista de itinerarios" });
+            next(err);
+        });
+});
+
 app.listen(port, () => {
     console.log(`[server]: Servidor iniciado en http://localhost:${port}`);
 });

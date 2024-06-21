@@ -64,7 +64,6 @@ async function init() {
 }
 init();
 
-
 export async function generadorItinerario(viaje: Viaje): Promise<{ actividades: Actividad[] }> {
   const prompt = `Crea un itinerario de viaje para ir a visitar ${viaje.destino} siendo un viajero de tipo ${viaje.viajero  === 'ciudad' ? 'urbano' : viaje.viajero === 'vida nocturna' ? 'nocturno' : viaje.viajero === 'museos' ? 'cultural' : 'naturalista'} entre los dias ${viaje.inicio.toLocaleDateString()} a las ${viaje.inicio.toLocaleTimeString()} y ${viaje.fin.toLocaleDateString()} a las ${viaje.fin.toLocaleTimeString()}. 
 
@@ -220,5 +219,4 @@ export async function consultarLista(): Promise<Lista> {
   
   return lista;
 }
-
 
