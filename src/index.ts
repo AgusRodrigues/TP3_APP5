@@ -1,11 +1,14 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import { agregarItinerario, borrarItinerario, consultarItinerario, consultarLista, Viaje } from "./Modelo";
+import cors from "cors";
 
 dotenv.config();
 
 const port = process.env.PORT || 3000; //si PORT no existe va a ser undefined, en ese caso quiero que 3000 sea el q use por defecto
 const app: Express = express();
+
+app.use(cors());
 
 // Middleware para que acepte JSON
 app.use(express.json());
